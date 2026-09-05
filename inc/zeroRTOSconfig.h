@@ -1,7 +1,9 @@
 #ifndef ZERORTOSCONFIG_H
 #define ZERORTOSCONFIG_H
 
-#define CLOCK_FREQ    (32000000)
-#define SYSTICK_FREQ  (1000)
+#define ZRTOS_CLOCK_FREQ          (32000000)
+#define ZRTOS_SYSTICK_FREQ        (1000)
+#define ZRTOS_TASK_NAME_MAX_LEN   60
+#define ZRTOS_TOTAL_HEAP_SIZE     4096U
 
 #endif

@@ -8,7 +8,11 @@ void rcc_setup(void){
 
 int main(){
     rcc_setup();
-    zeroRTOS_init();
+    zrtos_init();
+
+    while(1){
+        
+    }
 
     return 0;
 }
