@@ -4,9 +4,11 @@ static uint8_t zrtos_heap[ZRTOS_TOTAL_HEAP_SIZE];
 static uint8_t* nextFreeByte = zrtos_heap;
 
 void* zrtos_malloc(size_t size){
-    
-}
+    //  Check if enough space is available
+    if(!(ZRTOS_TOTAL_HEAP_SIZE-(uint32_t)(nextFreeByte-zrtos_heap)>size)) return 0;
 
-void zrtos_memory_init(){
+    uint8_t* ptr = nextFreeByte;
+    nextFreeByte+=size;
 
+    return (void*)ptr;
 }
