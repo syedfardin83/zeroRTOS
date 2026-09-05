@@ -1,0 +1,7 @@
+#ifndef ZERORTOSCONFIG_H
+#define ZERORTOSCONFIG_H
+
+#define CLOCK_FREQ    (32000000)
+#define SYSTICK_FREQ  (1000)
+
+#endif
