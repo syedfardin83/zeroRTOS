@@ -5,5 +5,6 @@
 #define ZRTOS_SYSTICK_FREQ        (1000)
 #define ZRTOS_TASK_NAME_MAX_LEN   60
 #define ZRTOS_TOTAL_HEAP_SIZE     4096U
+#define ZRTOS_TASKS_LIST_SIZE     5
 
 #endif

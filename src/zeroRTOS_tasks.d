@@ -1,6 +1,5 @@
-zeroRTOS.o: zeroRTOS.c ../libopencm3/include/libopencm3/cm3/systick.h \
- ../libopencm3/include/libopencm3/cm3/memorymap.h \
- ../libopencm3/include/libopencm3/cm3/common.h \
+zeroRTOS_tasks.o: zeroRTOS_tasks.c ../inc/zeroRTOS_tasks.h \
+ ../inc/common-includes.h \
  /usr/lib/gcc/arm-none-eabi/15.2.0/include/stdint.h \
  /usr/arm-none-eabi/include/stdint.h \
  /usr/arm-none-eabi/include/machine/_default_types.h \
@@ -8,7 +7,6 @@ zeroRTOS.o: zeroRTOS.c ../libopencm3/include/libopencm3/cm3/systick.h \
  /usr/arm-none-eabi/include/_newlib_version.h \
  /usr/arm-none-eabi/include/sys/_intsup.h \
  /usr/arm-none-eabi/include/sys/_stdint.h \
- /usr/lib/gcc/arm-none-eabi/15.2.0/include/stdbool.h \
- ../inc/zeroRTOSconfig.h ../inc/common-includes.h \
  /usr/lib/gcc/arm-none-eabi/15.2.0/include/stddef.h \
- ../inc/zeroRTOSconfig.h ../inc/zeroRTOS_tasks.h ../inc/common-includes.h
+ /usr/lib/gcc/arm-none-eabi/15.2.0/include/stdbool.h \
+ ../inc/zeroRTOSconfig.h ../inc/zeroRTOS_memory.h
