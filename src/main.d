@@ -19,4 +19,17 @@ main.o: main.c ../libopencm3/include/libopencm3/stm32/rcc.h \
  ../libopencm3/include/libopencm3/stm32/common/rcc_common_all.h \
  ../inc/zeroRTOS.h ../inc/zeroRTOS_memory.h ../inc/common-includes.h \
  /usr/lib/gcc/arm-none-eabi/15.2.0/include/stddef.h \
- ../inc/zeroRTOSconfig.h
+ /usr/arm-none-eabi/include/string.h /usr/arm-none-eabi/include/_ansi.h \
+ /usr/arm-none-eabi/include/newlib.h \
+ /usr/arm-none-eabi/include/sys/config.h \
+ /usr/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/arm-none-eabi/include/sys/reent.h \
+ /usr/arm-none-eabi/include/_ansi.h \
+ /usr/arm-none-eabi/include/sys/cdefs.h \
+ /usr/arm-none-eabi/include/sys/_types.h \
+ /usr/arm-none-eabi/include/machine/_types.h \
+ /usr/arm-none-eabi/include/sys/lock.h \
+ /usr/arm-none-eabi/include/sys/_locale.h \
+ /usr/arm-none-eabi/include/strings.h \
+ /usr/arm-none-eabi/include/sys/string.h ../inc/zeroRTOSconfig.h \
+ ../inc/zeroRTOS_tasks.h ../inc/common-includes.h

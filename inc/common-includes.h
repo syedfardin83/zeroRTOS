@@ -7,5 +7,6 @@
 #include <string.h>
 
 #include "zeroRTOSconfig.h"
+#include "zeroRTOS_tasks.h"
 
 #endif

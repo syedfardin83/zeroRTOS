@@ -9,4 +9,17 @@ zeroRTOS_tasks.o: zeroRTOS_tasks.c ../inc/zeroRTOS_tasks.h \
  /usr/arm-none-eabi/include/sys/_stdint.h \
  /usr/lib/gcc/arm-none-eabi/15.2.0/include/stddef.h \
  /usr/lib/gcc/arm-none-eabi/15.2.0/include/stdbool.h \
- ../inc/zeroRTOSconfig.h ../inc/zeroRTOS_memory.h
+ /usr/arm-none-eabi/include/string.h /usr/arm-none-eabi/include/_ansi.h \
+ /usr/arm-none-eabi/include/newlib.h \
+ /usr/arm-none-eabi/include/sys/config.h \
+ /usr/arm-none-eabi/include/machine/ieeefp.h \
+ /usr/arm-none-eabi/include/sys/reent.h \
+ /usr/arm-none-eabi/include/_ansi.h \
+ /usr/arm-none-eabi/include/sys/cdefs.h \
+ /usr/arm-none-eabi/include/sys/_types.h \
+ /usr/arm-none-eabi/include/machine/_types.h \
+ /usr/arm-none-eabi/include/sys/lock.h \
+ /usr/arm-none-eabi/include/sys/_locale.h \
+ /usr/arm-none-eabi/include/strings.h \
+ /usr/arm-none-eabi/include/sys/string.h ../inc/zeroRTOSconfig.h \
+ ../inc/zeroRTOS_tasks.h ../inc/zeroRTOS_memory.h

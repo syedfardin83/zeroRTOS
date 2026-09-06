@@ -20,7 +20,7 @@ typedef void (*zrtos_task_function_t)(void);
 void zrtos_tasks_init();
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
                         const char* task_name,
-                        const size_t task_stack_size,
+                        uint8_t task_stack_size,
                         uint32_t task_priority
 );
 

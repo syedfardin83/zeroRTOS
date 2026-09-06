@@ -15,7 +15,7 @@ void zrtos_add_to_tasks_list(TCB* tcb){
 
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
                         const char* task_name,
-                        const size_t task_stack_size,
+                        uint8_t task_stack_size,
                         uint32_t task_priority
 ){
     TCB* new_TCB = (TCB*)zrtos_malloc(sizeof(TCB));
@@ -25,11 +25,13 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
     //  Allocate stack
     uint32_t* new_stack = (uint32_t*)zrtos_malloc(task_stack_size);
     new_TCB->taskStack = new_stack;
-    new_TCB->endOfStack=new_stack+task_stack_size;
+    new_TCB->endOfStack=(uint32_t*)((uint8_t*)new_stack+task_stack_size);
 
     new_TCB->taskPriority = task_priority;
 
     strcpy(new_TCB->taskName,task_name);
+
+    zrtos_add_to_tasks_list(new_TCB);
 
     return new_TCB;
 
