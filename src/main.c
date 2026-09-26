@@ -9,20 +9,15 @@ void rcc_setup(void){
 }
 
 void task1(){
-
+    while(1);
 }
 
 int main(){
     rcc_setup();
     zrtos_init();
 
-    // Memory testing
-    // char* c = (char*)zrtos_malloc(sizeof(char));
-    // *c = 'H';
-
     //  Task Creation testing
     zrtos_create_task(task1,"Task 1",100,3);
-
 
     while(1){
 

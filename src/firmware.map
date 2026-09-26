@@ -757,22 +757,22 @@ END GROUP
 OUTPUT(firmware.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000     0x25a0
- .debug_info    0x00000000      0x358 main.o
- .debug_info    0x00000358      0x182 zeroRTOS.o
- .debug_info    0x000004da      0x31c zeroRTOS_tasks.o
- .debug_info    0x000007f6      0x1ab zeroRTOS_memory.o
- .debug_info    0x000009a1       0xc8 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libc.a(libc_a-strcpy.o)
- .debug_info    0x00000a69      0xc63 ../libopencm3/lib/libopencm3_stm32l0.a(rcc.o)
- .debug_info    0x000016cc      0x651 ../libopencm3/lib/libopencm3_stm32l0.a(rcc_common_all.o)
- .debug_info    0x00001d1d      0x2c3 ../libopencm3/lib/libopencm3_stm32l0.a(vector.o)
- .debug_info    0x00001fe0      0x23b ../libopencm3/lib/libopencm3_stm32l0.a(systick.o)
- .debug_info    0x0000221b      0x101 ../libopencm3/lib/libopencm3_stm32l0.a(assert.o)
- .debug_info    0x0000231c       0xf6 ../libopencm3/lib/libopencm3_stm32l0.a(flash_common_all.o)
- .debug_info    0x00002412       0xe3 ../libopencm3/lib/libopencm3_stm32l0.a(pwr_common_v2.o)
- .debug_info    0x000024f5       0x31 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_thumb1_case_uqi.o)
- .debug_info    0x00002526       0x3e /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_udivsi3.o)
- .debug_info    0x00002564       0x3c /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_dvmd_tls.o)
+.debug_info     0x00000000     0x258f
+ .debug_info    0x00000000      0x347 main.o
+ .debug_info    0x00000347      0x182 zeroRTOS.o
+ .debug_info    0x000004c9      0x31c zeroRTOS_tasks.o
+ .debug_info    0x000007e5      0x1ab zeroRTOS_memory.o
+ .debug_info    0x00000990       0xc8 /usr/lib/gcc/arm-none-eabi/15.2.0/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libc.a(libc_a-strcpy.o)
+ .debug_info    0x00000a58      0xc63 ../libopencm3/lib/libopencm3_stm32l0.a(rcc.o)
+ .debug_info    0x000016bb      0x651 ../libopencm3/lib/libopencm3_stm32l0.a(rcc_common_all.o)
+ .debug_info    0x00001d0c      0x2c3 ../libopencm3/lib/libopencm3_stm32l0.a(vector.o)
+ .debug_info    0x00001fcf      0x23b ../libopencm3/lib/libopencm3_stm32l0.a(systick.o)
+ .debug_info    0x0000220a      0x101 ../libopencm3/lib/libopencm3_stm32l0.a(assert.o)
+ .debug_info    0x0000230b       0xf6 ../libopencm3/lib/libopencm3_stm32l0.a(flash_common_all.o)
+ .debug_info    0x00002401       0xe3 ../libopencm3/lib/libopencm3_stm32l0.a(pwr_common_v2.o)
+ .debug_info    0x000024e4       0x31 /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_thumb1_case_uqi.o)
+ .debug_info    0x00002515       0x3e /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_udivsi3.o)
+ .debug_info    0x00002553       0x3c /usr/lib/gcc/arm-none-eabi/15.2.0/thumb/v6-m/nofp/libgcc.a(_dvmd_tls.o)
 
 .debug_abbrev   0x00000000      0xfa3
  .debug_abbrev  0x00000000      0x1c2 main.o
@@ -920,7 +920,7 @@ LOAD linker stubs
 
 .debug_str      0x00000000     0xd3c3
  .debug_str     0x00000000     0xd3c3 main.o
-                               0xa75d (size before relaxing)
+                               0xa756 (size before relaxing)
  .debug_str     0x0000d3c3        0x0 zeroRTOS.o
                                0x4997 (size before relaxing)
  .debug_str     0x0000d3c3        0x0 zeroRTOS_tasks.o
