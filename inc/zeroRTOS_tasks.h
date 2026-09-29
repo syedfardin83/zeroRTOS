@@ -3,6 +3,8 @@
 
 #include "common-includes.h"
 
+extern TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
+
 extern volatile uint8_t zrtos_tasks_running;
 
 extern volatile int zrtos_n_tasks;

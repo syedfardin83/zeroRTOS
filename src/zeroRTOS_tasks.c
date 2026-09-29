@@ -2,7 +2,7 @@
 #include "zeroRTOS_memory.h"
 
 //List of TCB pointers
-static TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
+TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
 volatile uint8_t zrtos_tasks_running;
 
 volatile int zrtos_n_tasks;

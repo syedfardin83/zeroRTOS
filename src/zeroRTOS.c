@@ -24,7 +24,48 @@ void zrtos_systick_setup(void){
 }
 
 void pend_sv_handler(void){
+    uint32_t* nt_tos = zrtos_tasks_list[zrtos_next_task]->topOfStack;
     
+    //  Push rest of the registers to current task stack
+    __asm__ volatile(
+        "mrs r0, psp \n\t" // loading current task topOfStack in r0
+
+        // Pushing r4 to r7 on current task stack
+        "subs r0, r0, #4 \n\t"
+        "str r4, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r5, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r6, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r7, [r0] \n\t"
+
+        //  Pushing r8 to r11 on current task stack
+        "mov r4, r8 \n\t"
+        "mov r5, r9 \n\t"
+        "mov r6, r10 \n\t"
+        "mov r7, r11 \n\t"
+
+        "subs r0, r0, #4 \n\t"
+        "str r4, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r5, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r6, [r0] \n\t"
+        "subs r0, r0, #4 \n\t"
+        "str r7, [r0] \n\t"
+
+    );
+    //  Updating current task TCB topOfStack
+    zrtos_tasks_list[zrtos_current_task]->topOfStack += 16U; //!!  
+
+    //  Loading r11 to r8 from next task stack
+    __asm__ volatile(
+        ""
+    );
+
+
+
 }
 
 void sys_tick_handler(void){
