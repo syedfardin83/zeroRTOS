@@ -3,15 +3,20 @@
 
 #include "common-includes.h"
 
+extern volatile uint8_t zrtos_tasks_running;
+
+extern volatile int zrtos_n_tasks;
+extern volatile int zrtos_current_task;
+extern volatile int zrtos_next_task;
+
 typedef struct TaskControlBlock{
 
     volatile uint32_t* topOfStack;
     uint32_t taskPriority;
-    uint32_t* taskStack;   // Lowest value of stack address
 
     char taskName[ZRTOS_TASK_NAME_MAX_LEN];
 
-    uint32_t* endOfStack;  //  Highest value of stack address
+    uint32_t taskStackSize;
 
     zrtos_task_function_t task_function;
 
@@ -20,6 +25,7 @@ typedef struct TaskControlBlock{
 typedef void (*zrtos_task_function_t)(void);
 
 void zrtos_tasks_init();
+void zrtos_tasks_start();
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
                         const char* task_name,
                         uint32_t task_stack_size,
