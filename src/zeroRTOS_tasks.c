@@ -14,6 +14,7 @@ void zrtos_add_to_tasks_list(TCB* tcb){
         if(zrtos_tasks_list[i]==NULL){
             zrtos_tasks_list[i]=tcb;
             zrtos_n_tasks++;
+            if(zrtos_n_tasks==1) zrtos_current_task=0;
             return;
         }
     }
@@ -46,7 +47,7 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
     for(int i=1;i<=14;i++) *(--new_TCB->topOfStack) = (uint32_t)0x00;
     
-    
+
 
     return new_TCB;
 
