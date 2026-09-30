@@ -3,8 +3,8 @@
 
 #include "common-includes.h"
 
-extern TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
 
+typedef void (*zrtos_task_function_t)(void);
 extern volatile uint8_t zrtos_tasks_running;
 
 extern volatile int zrtos_n_tasks;
@@ -24,7 +24,9 @@ typedef struct TaskControlBlock{
 
 } TCB;
 
-typedef void (*zrtos_task_function_t)(void);
+extern TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
+
+
 
 void zrtos_tasks_init();
 void zrtos_tasks_start();
