@@ -41,10 +41,11 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
     zrtos_add_to_tasks_list(new_TCB);
 
     // Push dummy register bank to new task stack
-    *(--new_TCB->topOfStack) = (1U << 24);
+    *(--new_TCB->topOfStack) = (uint32_t)(1U << 24);
     *(--new_TCB->topOfStack) = (uint32_t)task_function;
 
     for(int i=1;i<=14;i++) *(--new_TCB->topOfStack) = (uint32_t)0x00;
+    
     
 
     return new_TCB;

@@ -1,11 +1,16 @@
 #include "zeroRTOS_memory.h"
 
 static uint8_t zrtos_heap[ZRTOS_TOTAL_HEAP_SIZE];
-static uint8_t* nextFreeByte = zrtos_heap;
+static uint8_t* nextFreeByte;
 
+
+// size is in bytes
 void* zrtos_malloc(size_t size){
     //  Check if enough space is available
     if(!(ZRTOS_TOTAL_HEAP_SIZE-(uint32_t)(nextFreeByte-zrtos_heap)>size)) return 0;
+
+    //  alignment
+    if(size%4!=0) size = ((int)(size/4) + 1)*4;
 
     uint8_t* ptr = nextFreeByte;
     nextFreeByte+=size;
@@ -17,10 +22,13 @@ void* zrtos_stack_malloc(size_t size){
     //  Check if enough space is available
     if(!(ZRTOS_TOTAL_HEAP_SIZE-(uint32_t)(nextFreeByte-zrtos_heap)>size)) return 0;
 
+    //  alignment
+    if(size%4!=0) size = ((int)(size/4) + 1)*4;
+
     uint8_t* ptr = nextFreeByte;
     nextFreeByte+=size;
 
-    return (void*)(ptr+size-1);
+    return (void*)(ptr+size-4);
 }
 
 void* zrtos_memset(void* ptr, int c, size_t size){
@@ -30,4 +38,8 @@ void* zrtos_memset(void* ptr, int c, size_t size){
         c_ptr[i]=(char)c;
     }
     return ptr;
+}
+
+void zrtos_memory_init(){
+    nextFreeByte = zrtos_heap;
 }

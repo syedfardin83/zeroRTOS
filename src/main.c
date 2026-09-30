@@ -26,8 +26,8 @@ int main(){
     zrtos_init();
 
     //  Task Creation testing
-    zrtos_create_task(task1,"Task 1",100,3);
-    zrtos_create_task(task2,"Task 2",100,3);
+    zrtos_create_task(task1,"Task 1",104,3);
+    zrtos_create_task(task2,"Task 2",104,3);
 
     zrtos_tasks_start();
 

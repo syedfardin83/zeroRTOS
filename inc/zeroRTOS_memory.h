@@ -6,5 +6,6 @@
 void* zrtos_malloc(size_t size);
 void* zrtos_memset(void* ptr, int c, size_t size);
 void* zrtos_stack_malloc(size_t size);
+void zrtos_memory_init();
 
 #endif

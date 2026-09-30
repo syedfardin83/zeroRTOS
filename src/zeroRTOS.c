@@ -7,6 +7,7 @@
 #include "zeroRTOSconfig.h"
 #include "common-includes.h"
 #include "zeroRTOS_tasks.h"
+#include "zeroRTOS_memory.h"
 
 volatile uint64_t ticks=6;
 
@@ -98,6 +99,8 @@ void pend_sv_handler(void){
         "msr psp, r0  \n\t"     
 
 
+        //  return 
+        "bx lr \n\t"
 
     );
 
@@ -123,6 +126,8 @@ void sys_tick_handler(void){
 void zrtos_init(){
     zrtos_systick_setup();
     zrtos_tasks_init();
+    zrtos_memory_init();
+
 
     nvic_set_priority(NVIC_PENDSV_IRQ,0xff);
     nvic_set_priority(NVIC_SYSTICK_IRQ,0x00);
