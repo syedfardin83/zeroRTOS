@@ -26,10 +26,9 @@ void zrtos_systick_setup(void){
 
 TCB* ct_TCB = 0;
 TCB* nt_TCB = 0;
-void pend_sv_handler(void){
-    ct_TCB = zrtos_tasks_list[zrtos_current_task];
-    nt_TCB = zrtos_tasks_list[zrtos_next_task];
 
+// As the pendsv handler is pure assembly function...
+__attribute__((naked)) void pend_sv_handler(void){
 
     //  Push rest of the registers to current task stack
     __asm__ volatile(
@@ -86,28 +85,23 @@ void pend_sv_handler(void){
         "mov r8, r7 \n\t"
 
         // Load r7 to r4
-        "ldr r4, [r0] \n\t"
-        "add r0, r0, #4 \n\t"
-        "ldr r5, [r0] \n\t"
+        "ldr r7, [r0] \n\t"
         "add r0, r0, #4 \n\t"
         "ldr r6, [r0] \n\t"
         "add r0, r0, #4 \n\t"
-        "ldr r7, [r0] \n\t"
+        "ldr r5, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r4, [r0] \n\t"
         "add r0, r0, #4 \n\t"
 
         // psp changed to new tast stack pointer
-        "msr psp, r0  \n\t"     
-
-    );
-
-    // zrtos_tasks_list[zrtos_next_task]->topOfStack = nt_TCB->topOfStack + 16U;
-    zrtos_current_task = zrtos_next_task;
-
-    __asm__ volatile(
+        "msr psp, r0  \n\t"  
+        
         //  return 
         "bx lr \n\t"
 
     );
+
 }
 
 void sys_tick_handler(void){
@@ -116,6 +110,13 @@ void sys_tick_handler(void){
         //  determine next task to be executed
         if(zrtos_current_task==zrtos_n_tasks-1) zrtos_next_task = 0;
         else zrtos_next_task = zrtos_current_task+1;
+
+            ct_TCB = zrtos_tasks_list[zrtos_current_task];
+    nt_TCB = zrtos_tasks_list[zrtos_next_task];
+
+    zrtos_current_task = zrtos_next_task;
+
+
 
         //  Set pendsv bit
         SCB_ICSR |= SCB_ICSR_PENDSVSET;
