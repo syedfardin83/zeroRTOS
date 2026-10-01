@@ -19,7 +19,7 @@ void zrtos_switch_to_psp(void){
 }
 
 void zrtos_systick_setup(void){
-    systick_set_frequency(ZRTOS_CLOCK_FREQ, ZRTOS_CLOCK_FREQ);
+    systick_set_frequency(ZRTOS_SYSTICK_FREQ, ZRTOS_CLOCK_FREQ);
     systick_counter_enable();
     systick_interrupt_enable();
 }
@@ -98,15 +98,16 @@ void pend_sv_handler(void){
         // psp changed to new tast stack pointer
         "msr psp, r0  \n\t"     
 
-
-        //  return 
-        "bx lr \n\t"
-
     );
 
     // zrtos_tasks_list[zrtos_next_task]->topOfStack = nt_TCB->topOfStack + 16U;
     zrtos_current_task = zrtos_next_task;
 
+    __asm__ volatile(
+        //  return 
+        "bx lr \n\t"
+
+    );
 }
 
 void sys_tick_handler(void){

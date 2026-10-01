@@ -41,11 +41,13 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
     zrtos_add_to_tasks_list(new_TCB);
 
-    // Push dummy register bank to new task stack
-    *(--new_TCB->topOfStack) = (uint32_t)(1U << 24);
-    *(--new_TCB->topOfStack) = (uint32_t)task_function;
-
-    for(int i=1;i<=14;i++) *(--new_TCB->topOfStack) = (uint32_t)0x00;
+    if(zrtos_n_tasks!=1){
+        // Push dummy register bank to new task stack
+        *(--new_TCB->topOfStack) = (uint32_t)(1U << 24);
+        *(--new_TCB->topOfStack) = (uint32_t)task_function;
+    
+        for(int i=1;i<=14;i++) *(--new_TCB->topOfStack) = (uint32_t)0x00;
+    }
     
 
 
@@ -61,6 +63,29 @@ void zrtos_tasks_init(){
     zrtos_next_task=0;
 }
 
+TCB* firstTask = 0;
 void zrtos_tasks_start(){
     zrtos_tasks_running = 1;
+    firstTask = zrtos_tasks_list[0];
+
+
+    zrtos_current_task = 0;
+
+    __asm__ volatile(
+        //  Change psp to topOfStack of task0
+        "ldr r3, =(firstTask) \n\t"
+        "ldr r2, [r3]\n\t"
+        "ldr r1, [r2]\n\t"
+        "msr psp, r1\n\t"
+        
+        //  Change control bit
+        "mrs r0, control \n\t"
+        "movs r1, #2\n\t"
+        "orr r0, r1\n\t"
+        "msr control, r0\n\t"
+        "isb"
+    );
+
+    //  Call the first function
+    zrtos_tasks_list[0]->task_function();
 }

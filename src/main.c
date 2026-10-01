@@ -8,14 +8,16 @@ void rcc_setup(void){
     rcc_clock_setup_pll(&rcc_hsi_configs[RCC_CLOCK_CONFIG_HSI_32MHZ]);
 }
 
-uint32_t a=0,b=0;
+volatile uint64_t a=0,b=0;
 void task1(){
+    a=5;
     while(1){
         a++;
     }
 }
 
 void task2(){
+    b=9;
     while(1){
         b++;
     }
