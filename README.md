@@ -86,7 +86,7 @@ openocd -f interface/stlink.cfg -f target/stm32l0.cfg -c program firmware.elf ve
 ## Architecture
 <p align="center">
   <kbd style="background-color: #ffffff; display: inline-block; padding: 16px; border-radius: 8px;">
-    <img src="drawings.drawio.svg" alt="zeroRTOS Workflow" width="600">
+    <img src="scheduler_workflow.svg" alt="zeroRTOS Workflow" width="600">
   </kbd>
 </p>
 
