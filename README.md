@@ -1,4 +1,4 @@
-### zeroRTOS - a preemptive scheduler built for ARM Cortex M0+ architecture.
+# zeroRTOS - a preemptive scheduler built for ARM Cortex M0+ architecture.
 
 zeroRTOS is a preemptive scheduler built for ARM Cortex M0+ architecture, and specifically the *STM32L072CZYX* microcontroller, though it might work on other microcontrollers with the same architecture.
 
@@ -9,7 +9,7 @@ zeroRTOS is a preemptive scheduler built for ARM Cortex M0+ architecture, and sp
 - Development Board - STM32 B-L072Z-LRWAN1
 - Programming language - C, ARM Assembly
 - Firmware Library - libopencm3
-- cross-complier - arm-none-eabi-gcc
+- cross-compiler - arm-none-eabi-gcc
 - Debugging/ firmware flashing - OpenOCD(via ST-Link), GDB
 - IDE - Visual Studio Code
 - Development host machine - Fedora Linux 43 (KDE Plasma Desktop Edition) x86_64
@@ -28,7 +28,7 @@ zeroRTOS is a preemptive scheduler built for ARM Cortex M0+ architecture, and sp
 
 **Disclaimer:** This project was developed and tested exclusively on **Fedora Linux**. All commands, installation procedures, and debugging workflows below are **Linux-specific**. If you are on Windows or macOS, we recommend using WSL2 or a Linux VM.
 
-The project assumes you are using a stm32l072czyx microcontroller, and flashing/debugging via ST-Link.
+The project assumes you are using a STM32L072CZYX microcontroller, and flashing/debugging via ST-Link.
 
 ### Pre-requisites
 - `make`
@@ -78,26 +78,24 @@ make
 
 ### Flashing the firmware binary
 ```bash
-openocd -f interface/stlink.cfg -f target/stm32l0.cfg -c program firmware.elf verify reset exit
+openocd -f interface/stlink.cfg -f target/stm32l0.cfg -c "program firmware.elf verify reset exit"
 ```
 
 ---
 
 ## Architecture
 <p align="center">
-  <kbd style="background-color: #ffffff; display: inline-block; padding: 16px; border-radius: 8px;">
     <img src="scheduler_workflow.svg" alt="zeroRTOS Workflow" width="600">
-  </kbd>
 </p>
 
 ### The SysTick Timer
 zeroRTOS v1.0.0 is a preemptive round-robin scheduler. The SysTick timer is configured by default under `zrtos_init()` function with clock frequency of **32MHz**, and SysTick frequency of **1kHz**. 
-So, every 1ms, the SysTick exception is taken. The next task to be executed is determined in this handler, and the PendSV bit in the ICSR (Interrupt Control and State Register) is set, signalling the NVIC(Nested Vectored Interrupt Controller) that the PendSV exception must be excecuted.
+So, every 1ms, the SysTick exception is taken. The next task to be executed is determined in this handler, and the `PENDSVSET` bit in the ICSR (Interrupt Control and State Register) is set, signalling the NVIC(Nested Vectored Interrupt Controller) that the PendSV exception must be executed.
 
 ### The PendSV Handler
-This is the exception where the actual context switching takes place. This is an exception configured with the lowest priority, so that context switching does not take place when there is an important exception handler is already being excecuted. 
+This is the exception where the actual context switching takes place. This is an exception configured with the lowest priority, so that context switching does not take place when there is an important exception handler is already being executed. 
 
 ### The Context Switching Mechanism
 **Note: This mechanism is specifically for the ARM Cortex-M0+ processors.**
 When any exception is taken by the processor, an in-built mechanism pushes the `xPSR`, `PC`, `LR`, `R12`, `R3`,`R2`,`R1` and `R0` register (in the same order) to the running task's stack automatically.
-The PendSV handler pushes the rest of the general purpose registers - `R4` to `R11` to the current task's stack, and loads the register values from the next task's stack into the processor's general purpose regsiters. Because the ARMv6-M architecture cannot push high registers (r8-r11) in a single instruction, the handler stages them through r4-r7 before pushing. The PSP value is then changed to the new task's `topOfStack` value, which is taken from the new task's TCB, effectively changing the running task. 
+The PendSV handler pushes the rest of the general purpose registers - `R4` to `R11` to the current task's stack, and loads the register values (`r4-r11`) from the next task's stack into the processor's general purpose registers. Because the ARMv6-M architecture cannot push high registers (r8-r11) in a single instruction, the handler stages them through r4-r7 before pushing. The PSP value is then changed to the new task's `topOfStack` value, which is taken from the new task's TCB, effectively changing the running task. 
