@@ -90,14 +90,14 @@ openocd -f interface/stlink.cfg -f target/stm32l0.cfg -c program firmware.elf ve
   </kbd>
 </p>
 
-### The Systick Timer
-zeroRTOS v1.0.0 is a preemptive round-robin scheduler. The Systick timer is configured by default under `zrtos_init()` function with clock frequency of **32MHz**, and systick frequency of **1kHz**. 
-So, every 1ms, the systick handler is fired. The next task to be executed is determined in this handler, and the PendSV bit in the ICSR (Interrupt Control and State Register) is set, signalling the NVIC(Nested Vectored Interrupt Controller) that the PendSV exception must be excecuted.
+### The SysTick Timer
+zeroRTOS v1.0.0 is a preemptive round-robin scheduler. The SysTick timer is configured by default under `zrtos_init()` function with clock frequency of **32MHz**, and SysTick frequency of **1kHz**. 
+So, every 1ms, the SysTick exception is taken. The next task to be executed is determined in this handler, and the PendSV bit in the ICSR (Interrupt Control and State Register) is set, signalling the NVIC(Nested Vectored Interrupt Controller) that the PendSV exception must be excecuted.
 
 ### The PendSV Handler
 This is the exception where the actual context switching takes place. This is an exception configured with the lowest priority, so that context switching does not take place when there is an important exception handler is already being excecuted. 
 
 ### The Context Switching Mechanism
 **Note: This mechanism is specifically for the ARM Cortex-M0+ processors.**
-When any exception is taken by the processor, an in-built mechanism pushes the `xPSR`, `PC`, `LR`, `R12` and  `R3` to `R0` register (in the same order) to the running task's stack automatically.
-The PendSV handler pushes the rest of the general purpose registers - `R4` to `R11` to the current task's stack, and loads the register values from the next task's stack into the processor's general purpose regsiters. The PSP value is then changed, effectively changing the running task. 
+When any exception is taken by the processor, an in-built mechanism pushes the `xPSR`, `PC`, `LR`, `R12`, `R3`,`R2`,`R1` and `R0` register (in the same order) to the running task's stack automatically.
+The PendSV handler pushes the rest of the general purpose registers - `R4` to `R11` to the current task's stack, and loads the register values from the next task's stack into the processor's general purpose regsiters. Because the ARMv6-M architecture cannot push high registers (r8-r11) in a single instruction, the handler stages them through r4-r7 before pushing. The PSP value is then changed to the new task's `topOfStack` value, which is taken from the new task's TCB, effectively changing the running task. 
