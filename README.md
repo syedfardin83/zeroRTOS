@@ -63,6 +63,9 @@ Along with the binary, `.elf` `.hex` `.map` are also produced by default, under 
 **Adding new files**
 Every new source file added must be added in `src/Makefile` under `OBJS` Makefile variable as a `.o` file, to make it known to the compiler of a new object file it has to produce.
 
+**Important note:**
+In the main code, the `zrtos_init()` function is to be used, to initialize zeroRTOS. From this point, the Microcontroller is under the control of zeroRTOS. After initializations, new tasks can be created using the `zrtos_create_task()` function. **The tasks will be executed in the order that they are added**. To start the execution of the tasks, use the `zrtos_tasks_start()` function. **Any code after this function call will never be executed**.
+
 
 <br>
 
@@ -86,3 +89,15 @@ openocd -f interface/stlink.cfg -f target/stm32l0.cfg -c program firmware.elf ve
     <img src="drawings.drawio.svg" alt="zeroRTOS Workflow" width="600">
   </kbd>
 </p>
+
+### The Systick Timer
+zeroRTOS v1.0.0 is a preemptive round-robin scheduler. The Systick timer is configured by default under `zrtos_init()` function with clock frequency of **32MHz**, and systick frequency of **1kHz**. 
+So, every 1ms, the systick handler is fired. The next task to be executed is determined in this handler, and the PendSV bit in the ICSR (Interrupt Control and State Register) is set, signalling the NVIC(Nested Vectored Interrupt Controller) that the PendSV exception must be excecuted.
+
+### The PendSV Handler
+This is the exception where the actual context switching takes place. This is an exception configured with the lowest priority, so that context switching does not take place when there is an important exception handler is already being excecuted. 
+
+### The Context Switching Mechanism
+**Note: This mechanism is specifically for the ARM Cortex-M0+ processors.**
+When any exception is taken by the processor, an in-built mechanism pushes the `xPSR`, `PC`, `LR`, `R12` and  `R3` to `R0` register (in the same order) to the running task's stack automatically.
+The PendSV handler pushes the rest of the general purpose registers - `R4` to `R11` to the current task's stack, and loads the register values from the next task's stack into the processor's general purpose regsiters. The PSP value is then changed, effectively changing the running task. 
