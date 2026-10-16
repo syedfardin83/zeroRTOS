@@ -1,4 +1,5 @@
-#include "zeroRTOS_memory.h"
+#include "memory.h"
+#include "common-includes.h"
 
 static uint8_t zrtos_heap[ZRTOS_TOTAL_HEAP_SIZE];
 static uint8_t* nextFreeByte;

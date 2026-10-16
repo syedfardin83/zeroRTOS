@@ -1,5 +1,6 @@
-#include "zeroRTOS_tasks.h"
-#include "zeroRTOS_memory.h"
+#include "tasks.h"
+#include "memory.h"
+#include "zrtos_arch.h"
 
 //List of TCB pointers
 TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
@@ -9,7 +10,7 @@ volatile int zrtos_n_tasks;
 volatile int zrtos_current_task;
 volatile int zrtos_next_task;
 
-void zrtos_add_to_tasks_list(TCB* tcb){
+void zrtos_add_to_tasks_list(TCB* tcb){  
     for(int i=0;i<ZRTOS_TASKS_LIST_SIZE;i++){
         if(zrtos_tasks_list[i]==NULL){
             zrtos_tasks_list[i]=tcb;
@@ -43,10 +44,8 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
     if(zrtos_n_tasks!=1){
         // Push dummy register bank to new task stack
-        *(--new_TCB->topOfStack) = (uint32_t)(1U << 24);
-        *(--new_TCB->topOfStack) = (uint32_t)task_function;
-    
-        for(int i=1;i<=14;i++) *(--new_TCB->topOfStack) = (uint32_t)0x00;
+
+        zrtos_push_dummy(new_TCB,task_function);
     }
     
 

@@ -4,10 +4,10 @@
 #include <libopencm3/cm3/scb.h>
 #include <libopencm3/cm3/nvic.h>
 
-#include "zeroRTOSconfig.h"
+#include "zrtos_config.h"
 #include "common-includes.h"
-#include "zeroRTOS_tasks.h"
-#include "zeroRTOS_memory.h"
+#include "tasks.h"
+#include "memory.h"
 
 volatile uint64_t ticks=6;
 

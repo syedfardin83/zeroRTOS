@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "zeroRTOSconfig.h"
-#include "zeroRTOS_tasks.h"
+#include "zrtos_config.h"
+#include "tasks.h"
 
 #endif

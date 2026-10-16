@@ -12,7 +12,9 @@
             "defines": ["_DEBUG",
                 "UNICODE",
                 "_UNICODE",
-                "STM32L0"],
+                "STM32L0",
+                "ZRTOS_ARCH_ARMV6M"
+            ],
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
             "compilerArgs": [
                 "-mcpu=cortex-m0plus",

@@ -1,6 +1,6 @@
 BINARY = firmware
 
-OBJS += zeroRTOS.o zeroRTOS_tasks.o zeroRTOS_memory.o
+OBJS += kernel.o tasks.o memory.o
 
 ## My includes:
 INCLUDES += -I../inc
