@@ -70,20 +70,8 @@ void zrtos_tasks_start(){
 
     zrtos_current_task = 0;
 
-    __asm__ volatile(
-        //  Change psp to topOfStack of task0
-        "ldr r3, =(firstTask) \n\t"
-        "ldr r2, [r3]\n\t"
-        "ldr r1, [r2]\n\t"
-        "msr psp, r1\n\t"
-        
-        //  Change control bit
-        "mrs r0, control \n\t"
-        "movs r1, #2\n\t"
-        "orr r0, r1\n\t"
-        "msr control, r0\n\t"
-        "isb"
-    );
+    //  Switch to thread mode from handler mode
+    zrtos_switch_to_thread(firstTask);
 
     //  Call the first function
     zrtos_tasks_list[0]->task_function();
