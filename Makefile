@@ -6,37 +6,17 @@ OBJS += kernel.o tasks.o memory.o
 INCLUDES += -I../inc
 CFLAGS += $(INCLUDES)
 
-DEVICE = stm32l072czyx
-OPENCM3_DIR = ../libopencm3
+FAMILY ?= stm32/l0
+ARCH ?= ARMV6M
+MCU ?= stm32l072czyx
+OPENCM3_DIR ?= ./libopencm3
+OPENCM3_LIB = libopencm3/lib/$(subst /,_,libopencm3_$(FAMILY)).a
 
-CFLAGS += -Os -ggdb3
-CPPFLAGS += -MD
-LDFLAGS += -static -nostartfiles
-LDFLAGS += -Wl,-Map=$(BINARY).map
-LDLIBS += -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
+# Building libopencm3 static .a library file 
 
-.PHONY: clean all
+libopencm3: $(OPENCM3_LIB)
 
-all: $(BINARY).elf $(BINARY).hex $(BINARY).bin
+$(OPENCM3_LIB):
+	@printf "MAKE libopencm3 for $(FAMILY)"
+	$(MAKE) -C libopencm3 TARGETS=$(FAMILY)
 
-clean:
-	$(Q)$(RM) -rf $(BINARY).* *.o *.d
-
-include $(OPENCM3_DIR)/mk/genlink-rules.mk
-include $(OPENCM3_DIR)/mk/gcc-rules.mk
-
-################################################################################
-# OpenOCD specific variables
-
-OOCD		?= openocd
-OOCD_INTERFACE	?= stlink-v2-1
-OOCD_TARGET	?= stm32l0
-
-################################################################################
-# Black Magic Probe specific variables
-# Set the BMP_PORT to a serial port and then BMP is used for flashing
-BMP_PORT	?=
-
-################################################################################
-# texane/stlink specific variables
-#STLINK_PORT	?= :4242
