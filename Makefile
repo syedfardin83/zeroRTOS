@@ -23,7 +23,7 @@ CFLAGS += $(INCLUDES)
 
 LIB_NAME = lib/$(ARCH)/libzeroRTOS.a
 
-all: $(KERNEL_OBJS) $(ARCH_OBJS) $(LIB_NAME)
+all: libopencm3 $(KERNEL_OBJS) $(ARCH_OBJS) $(LIB_NAME)
 	@printf "Built kernel files\n"
 	@printf "Built arch files\n"
 	@printf "Built $(LIB_NAME)\n"
