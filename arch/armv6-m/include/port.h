@@ -6,9 +6,10 @@
 
 
 #include "kernel/include/tasks.h"
-#include <libopencm3/cm3/scb.h>
-#include <libopencm3/cm3/nvic.h>
-#include <libopencm3/cm3/systick.h>
+#include "libopencm3/include/libopencm3/cm3/scb.h"
+#include "libopencm3/include/libopencm3/cm3/nvic.h"
+#include "libopencm3/include/libopencm3/cm3/systick.h"
+
 
 void zrtos_push_dummy(TCB* new_TCB, zrtos_task_function_t task_function);
 void zrtos_switch_to_thread(TCB* first_task);

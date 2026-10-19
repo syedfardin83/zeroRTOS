@@ -28,4 +28,5 @@ build//arch/port.o: arch/armv6-m/src/port.c arch/armv6-m/include/port.h \
  libopencm3/include/libopencm3/cm3/nvic.h \
  libopencm3/include/libopencm3/dispatch/nvic.h \
  libopencm3/include/libopencm3/stm32/l0/nvic.h \
+ libopencm3/include/libopencm3/cm3/nvic.h \
  libopencm3/include/libopencm3/cm3/systick.h

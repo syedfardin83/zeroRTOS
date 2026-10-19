@@ -26,4 +26,9 @@ build//kernel/tasks.o: kernel/src/tasks.c kernel/include/tasks.h \
  kernel/include/zrtos_arch.h arch/armv6-m/include/port.h \
  kernel/include/tasks.h libopencm3/include/libopencm3/cm3/scb.h \
  libopencm3/include/libopencm3/cm3/memorymap.h \
- libopencm3/include/libopencm3/cm3/common.h
+ libopencm3/include/libopencm3/cm3/common.h \
+ libopencm3/include/libopencm3/cm3/nvic.h \
+ libopencm3/include/libopencm3/dispatch/nvic.h \
+ libopencm3/include/libopencm3/stm32/l0/nvic.h \
+ libopencm3/include/libopencm3/cm3/nvic.h \
+ libopencm3/include/libopencm3/cm3/systick.h
