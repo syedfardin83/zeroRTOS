@@ -1,5 +1,16 @@
 #include "arch/armv6-m/include/port.h"
 
+void zrtos_systick_setup(void){
+    systick_set_frequency(ZRTOS_SYSTICK_FREQ, ZRTOS_CLOCK_FREQ);
+    systick_counter_enable();
+    systick_interrupt_enable();
+}
+
+void zrtos_nvic_setup(void){
+    nvic_set_priority(NVIC_PENDSV_IRQ,0xff);
+    nvic_set_priority(NVIC_SYSTICK_IRQ,0x00);
+}
+
 void zrtos_push_dummy(TCB* new_TCB, zrtos_task_function_t task_function){
 
 
