@@ -38,7 +38,12 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
     new_TCB->taskPriority = task_priority;
 
-    strcpy(new_TCB->taskName,task_name);
+    int i = 0;
+    while (task_name[i] != '\0' && i < ZRTOS_TASK_NAME_MAX_LEN - 1) {
+        new_TCB->taskName[i] = task_name[i];
+        i++;
+    }
+    new_TCB->taskName[i] = '\0';
 
     zrtos_add_to_tasks_list(new_TCB);
 
