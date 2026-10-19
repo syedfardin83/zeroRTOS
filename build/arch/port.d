@@ -24,4 +24,8 @@ build//arch/port.o: arch/armv6-m/src/port.c arch/armv6-m/include/port.h \
  /usr/arm-none-eabi/include/sys/string.h kernel/include/zrtos_config.h \
  kernel/include/tasks.h libopencm3/include/libopencm3/cm3/scb.h \
  libopencm3/include/libopencm3/cm3/memorymap.h \
- libopencm3/include/libopencm3/cm3/common.h
+ libopencm3/include/libopencm3/cm3/common.h \
+ libopencm3/include/libopencm3/cm3/nvic.h \
+ libopencm3/include/libopencm3/dispatch/nvic.h \
+ libopencm3/include/libopencm3/stm32/l0/nvic.h \
+ libopencm3/include/libopencm3/cm3/systick.h
