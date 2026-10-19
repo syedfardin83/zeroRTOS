@@ -23,6 +23,7 @@ void zrtos_push_dummy(TCB* new_TCB, zrtos_task_function_t task_function){
 
 void zrtos_switch_to_thread(TCB* first_task){
     __asm__ volatile(
+
         "ldr r1, [%0] \n\t"     
         
         // Change psp to topOfStack of first_task
@@ -34,6 +35,9 @@ void zrtos_switch_to_thread(TCB* first_task){
         "orr r0, r1 \n\t"
         "msr control, r0 \n\t"
         "isb \n\t"
+        
+        : 
+        : "r" (first_task)      
     );
 }
 
