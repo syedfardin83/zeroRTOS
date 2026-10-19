@@ -22,19 +22,18 @@ void zrtos_push_dummy(TCB* new_TCB, zrtos_task_function_t task_function){
 }
 
 void zrtos_switch_to_thread(TCB* first_task){
-        __asm__ volatile(
-        //  Change psp to topOfStack of task0
-        "ldr r3, =(first_task) \n\t"
-        "ldr r2, [r3]\n\t"
-        "ldr r1, [r2]\n\t"
-        "msr psp, r1\n\t"
+    __asm__ volatile(
+        "ldr r1, [%0] \n\t"     
         
-        //  Change control bit
+        // Change psp to topOfStack of first_task
+        "msr psp, r1 \n\t"      
+        
+        // Change control bit
         "mrs r0, control \n\t"
-        "movs r1, #2\n\t"
-        "orr r0, r1\n\t"
-        "msr control, r0\n\t"
-        "isb"
+        "movs r1, #2 \n\t"
+        "orr r0, r1 \n\t"
+        "msr control, r0 \n\t"
+        "isb \n\t"
     );
 }
 
