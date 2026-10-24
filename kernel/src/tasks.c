@@ -4,7 +4,6 @@
 
 //List of TCB pointers
 TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
-volatile uint8_t zrtos_tasks_running;
 
 volatile int zrtos_n_tasks;
 volatile int zrtos_current_task;
@@ -47,11 +46,8 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
     zrtos_add_to_tasks_list(new_TCB);
 
-    if(zrtos_n_tasks!=1){
-        // Push dummy register bank to new task stack
-
-        zrtos_push_dummy(new_TCB,task_function);
-    }
+    // Push dummy register bank to new task stack
+    zrtos_push_dummy(new_TCB,task_function);
     
 
 
@@ -60,7 +56,6 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 }
 
 void zrtos_tasks_init(){
-    zrtos_tasks_running = 0;
     zrtos_memset(zrtos_tasks_list,0,sizeof(TCB*)*ZRTOS_TASKS_LIST_SIZE);
     zrtos_n_tasks=0;
     zrtos_current_task=0;
@@ -69,15 +64,6 @@ void zrtos_tasks_init(){
 
 TCB* firstTask = 0;
 void zrtos_tasks_start(){
-    zrtos_tasks_running = 1;
-    firstTask = zrtos_tasks_list[0];
-
-
-    zrtos_current_task = 0;
-
-    //  Switch to thread mode from handler mode
-    zrtos_switch_to_thread(firstTask);
-
-    //  Call the first function
-    zrtos_tasks_list[0]->task_function();
+    // start the systick interrupts
+    zrtos_systick_enable();
 }

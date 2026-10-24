@@ -16,5 +16,6 @@ void zrtos_switch_to_thread(TCB* first_task);
 void zrtos_set_pendsv(void);
 void zrtos_nvic_setup(void);
 void zrtos_systick_setup(void);
+void zrtos_systick_enable(void);
 
 #endif

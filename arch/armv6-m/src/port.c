@@ -3,6 +3,9 @@
 void zrtos_systick_setup(void){
     systick_set_frequency(ZRTOS_SYSTICK_FREQ, ZRTOS_CLOCK_FREQ);
     systick_counter_enable();
+}
+
+void zrtos_systick_enable(void){
     systick_interrupt_enable();
 }
 
