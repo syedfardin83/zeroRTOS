@@ -14,13 +14,8 @@ TCB* nt_TCB = 0;
 void sys_tick_handler(void){
 
     //  determine next task to be executed
-    if(zrtos_current_task==zrtos_n_tasks-1) zrtos_next_task = 0;
-    else zrtos_next_task = zrtos_current_task+1;
-
-    ct_TCB = zrtos_tasks_list[zrtos_current_task];
-    nt_TCB = zrtos_tasks_list[zrtos_next_task];
-
-    zrtos_current_task = zrtos_next_task;
+    if(ct_TCB->next) nt_TCB = ct_TCB->next;
+    else nt_TCB = zrtos_ready;
 
     //  Set pendsv bit
     zrtos_set_pendsv();

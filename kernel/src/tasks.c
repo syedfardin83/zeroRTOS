@@ -2,22 +2,29 @@
 #include "memory.h"
 #include "zrtos_arch.h"
 
-//List of TCB pointers
-TCB* zrtos_tasks_list[ZRTOS_TASKS_LIST_SIZE];
 
 volatile int zrtos_n_tasks;
-volatile int zrtos_current_task;
-volatile int zrtos_next_task;
 
-void zrtos_add_to_tasks_list(TCB* tcb){  
-    for(int i=0;i<ZRTOS_TASKS_LIST_SIZE;i++){
-        if(zrtos_tasks_list[i]==NULL){
-            zrtos_tasks_list[i]=tcb;
-            zrtos_n_tasks++;
-            if(zrtos_n_tasks==1) zrtos_current_task=0;
-            return;
+TCB* zrtos_ready;
+TCB* zrtos_delayed;
+
+void zrtos_add_to_tasks_list(TCB* tcb) {
+    tcb->next = 0;
+
+    if (zrtos_ready == 0 || tcb->taskPriority > zrtos_ready->taskPriority) {
+        tcb->next = zrtos_ready;
+        zrtos_ready = tcb;
+    } 
+
+    else {
+        TCB* curr_node = zrtos_ready;
+        while (curr_node->next != 0 && curr_node->next->taskPriority >= tcb->taskPriority) {
+            curr_node = curr_node->next;
         }
+        tcb->next = curr_node->next;
+        curr_node->next = tcb;
     }
+    zrtos_n_tasks++;
 }
 
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
@@ -44,23 +51,20 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
     }
     new_TCB->taskName[i] = '\0';
 
-    zrtos_add_to_tasks_list(new_TCB);
-
     // Push dummy register bank to new task stack
     zrtos_push_dummy(new_TCB,task_function);
     
-
-
+    zrtos_add_to_tasks_list(new_TCB);
 
     return new_TCB;
 
 }
 
 void zrtos_tasks_init(){
-    zrtos_memset(zrtos_tasks_list,0,sizeof(TCB*)*ZRTOS_TASKS_LIST_SIZE);
     zrtos_n_tasks=0;
-    zrtos_current_task=0;
-    zrtos_next_task=0;
+
+    zrtos_ready = 0;
+    zrtos_delayed = 0;
 }
 
 TCB* firstTask = 0;
@@ -71,20 +75,14 @@ void zrtos_tasks_start(){
         return;
     }
 
-    zrtos_current_task = 0;
-    zrtos_next_task = 0;
-
-    firstTask = zrtos_tasks_list[0];
-    ct_TCB = zrtos_tasks_list[0];
+    firstTask = zrtos_ready;
+    ct_TCB = zrtos_ready;
+    nt_TCB = zrtos_ready;
     //start first task
     
     
     // start the systick interrupts
     zrtos_systick_enable();
-
-    //  call svc
-    //....
-    
     zrtos_start_first_task();
 
     while(1);
