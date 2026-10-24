@@ -33,11 +33,11 @@ void zrtos_switch_to_thread(TCB* first_task){
         "msr psp, r1 \n\t"      
         
         // Change control bit
-        // "mrs r0, control \n\t"
-        // "movs r1, #2 \n\t"
-        // "orr r0, r1 \n\t"
-        // "msr control, r0 \n\t"
-        // "isb \n\t"
+        "mrs r0, control \n\t"
+        "movs r1, #2 \n\t"
+        "orr r0, r1 \n\t"
+        "msr control, r0 \n\t"
+        "isb \n\t"
         
         : 
         : "r" (first_task)      
@@ -46,6 +46,100 @@ void zrtos_switch_to_thread(TCB* first_task){
 
 void zrtos_set_pendsv(void){
     SCB_ICSR |= SCB_ICSR_PENDSVSET;
+}
+
+__attribute__((naked)) void zrtos_start_first_task(void){
+    __asm__ volatile(
+        "ldr r2, =(ct_TCB)\n\t"
+        "ldr r1, [r2]\n\t" // r1 = ct_TCB
+        "ldr r0, [r1]\n\t"
+
+        // Change control bit
+        "mrs r0, control \n\t"
+        "movs r1, #2 \n\t"
+        "orr r0, r1 \n\t"
+        "msr control, r0 \n\t"
+        "isb \n\t"
+
+        //  Loading r11 to r8
+        "ldr r4, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r5, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r6, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r7, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+
+        "mov r11, r4 \n\t"
+        "mov r10, r5 \n\t"
+        "mov r9, r6 \n\t"
+        "mov r8, r7 \n\t"
+
+        // Load r7 to r4
+        "ldr r7, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r6, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r5, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r4, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+
+        "msr psp, r0\n\t"
+
+        "ldr r0, =0xFFFFFFFD \n\t"
+        "bx r0 \n\t"
+
+
+    );
+}
+
+__attribute__((naked)) void sv_call_handler(void){
+    __asm__ volatile(
+        "ldr r2, =(ct_TCB)\n\t"
+        "ldr r1, [r2]\n\t" // r1 = ct_TCB
+        "ldr r0, [r1]\n\t"
+
+        // Change control bit
+        "mrs r0, control \n\t"
+        "movs r1, #2 \n\t"
+        "orr r0, r1 \n\t"
+        "msr control, r0 \n\t"
+        "isb \n\t"
+
+        //  Loading r11 to r8
+        "ldr r4, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r5, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r6, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r7, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+
+        "mov r11, r4 \n\t"
+        "mov r10, r5 \n\t"
+        "mov r9, r6 \n\t"
+        "mov r8, r7 \n\t"
+
+        // Load r7 to r4
+        "ldr r7, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r6, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r5, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r4, [r0] \n\t"
+        "add r0, r0, #4 \n\t"
+
+        "msr psp, r0\n\t"
+
+        "ldr r0, =0xFFFFFFFD \n\t"
+        "bx r0 \n\t"
+
+
+    );
 }
 
 // As the pendsv handler is pure assembly function...
@@ -115,7 +209,7 @@ __attribute__((naked)) void pend_sv_handler(void){
         "ldr r4, [r0] \n\t"
         "add r0, r0, #4 \n\t"
 
-        // psp changed to new tast stack pointer
+        // psp changed to new task stack pointer
         "msr psp, r0  \n\t"  
         
         //  return 

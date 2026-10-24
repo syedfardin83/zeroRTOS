@@ -51,6 +51,7 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
     
 
 
+
     return new_TCB;
 
 }
@@ -72,12 +73,19 @@ void zrtos_tasks_start(){
 
     zrtos_current_task = 0;
     zrtos_next_task = 0;
-    zrtos_switch_to_thread(zrtos_tasks_list[0]);
 
+    firstTask = zrtos_tasks_list[0];
+    ct_TCB = zrtos_tasks_list[0];
+    //start first task
+    
+    
     // start the systick interrupts
     zrtos_systick_enable();
-    ct_TCB = zrtos_tasks_list[0];
-    nt_TCB = zrtos_tasks_list[0];
-    zrtos_set_pendsv();
+
+    //  call svc
+    //....
+    
+    zrtos_start_first_task();
+
     while(1);
 }
