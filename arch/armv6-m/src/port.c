@@ -33,11 +33,11 @@ void zrtos_switch_to_thread(TCB* first_task){
         "msr psp, r1 \n\t"      
         
         // Change control bit
-        "mrs r0, control \n\t"
-        "movs r1, #2 \n\t"
-        "orr r0, r1 \n\t"
-        "msr control, r0 \n\t"
-        "isb \n\t"
+        // "mrs r0, control \n\t"
+        // "movs r1, #2 \n\t"
+        // "orr r0, r1 \n\t"
+        // "msr control, r0 \n\t"
+        // "isb \n\t"
         
         : 
         : "r" (first_task)      
