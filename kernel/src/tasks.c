@@ -74,4 +74,6 @@ void zrtos_tasks_start(){
 
     // start the systick interrupts
     zrtos_systick_enable();
+    zrtos_set_pendsv();
+    while(1);
 }
