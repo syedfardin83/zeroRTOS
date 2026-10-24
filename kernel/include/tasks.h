@@ -2,6 +2,7 @@
 #define TASKS_H
 
 #include "common-includes.h"
+#include "tasks.h"
 
 
 typedef void (*zrtos_task_function_t)(void);

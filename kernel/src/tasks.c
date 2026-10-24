@@ -63,6 +63,8 @@ void zrtos_tasks_init(){
 }
 
 TCB* firstTask = 0;
+extern TCB* ct_TCB;
+extern TCB* nt_TCB;
 void zrtos_tasks_start(){
     if(zrtos_n_tasks == 0){
         return;
@@ -74,6 +76,8 @@ void zrtos_tasks_start(){
 
     // start the systick interrupts
     zrtos_systick_enable();
+    ct_TCB = zrtos_tasks_list[0];
+    nt_TCB = zrtos_tasks_list[0];
     zrtos_set_pendsv();
     while(1);
 }
