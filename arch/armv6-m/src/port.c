@@ -55,10 +55,10 @@ __attribute__((naked)) void zrtos_start_first_task(void){
         "ldr r0, [r1]\n\t"
 
         // Change control bit
-        "mrs r0, control \n\t"
+        "mrs r2, control \n\t"
         "movs r1, #2 \n\t"
-        "orr r0, r1 \n\t"
-        "msr control, r0 \n\t"
+        "orr r2, r1 \n\t"
+        "msr control, r2 \n\t"
         "isb \n\t"
 
         //  Loading r11 to r8
@@ -86,10 +86,20 @@ __attribute__((naked)) void zrtos_start_first_task(void){
         "ldr r4, [r0] \n\t"
         "add r0, r0, #4 \n\t"
 
+        //  Take care of the next set of regs
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+        "ldr r1, [r0]\n\t"
+        "add r0, r0, #4 \n\t"
+        "add r0, r0, #4 \n\t"
+
         "msr psp, r0\n\t"
 
-        "ldr r0, =0xFFFFFFFD \n\t"
-        "bx r0 \n\t"
+        "bx r1 \n\t"
 
 
     );
