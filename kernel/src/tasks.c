@@ -77,7 +77,7 @@ void zrtos_tasks_start(){
 
     firstTask = zrtos_ready;
     ct_TCB = zrtos_ready;
-    nt_TCB = zrtos_ready;
+    // nt_TCB = zrtos_ready;
     //start first task
     
     
