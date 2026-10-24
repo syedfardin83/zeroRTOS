@@ -194,6 +194,9 @@ __attribute__((naked)) void pend_sv_handler(void){
         "ldr r3, [r2] \n\t"     // r3 has location of next task TCB
         "ldr r0, [r3] \n\t"     //  r0 has value of new task stack pointer
 
+        //  Change value of ct_TCB to nt_TCB
+        "str r3, [r2]\n\t"
+
         //  Loading r11 to r8
         "ldr r4, [r0] \n\t"
         "add r0, r0, #4 \n\t"
@@ -218,6 +221,8 @@ __attribute__((naked)) void pend_sv_handler(void){
         "add r0, r0, #4 \n\t"
         "ldr r4, [r0] \n\t"
         "add r0, r0, #4 \n\t"
+
+
 
         // psp changed to new task stack pointer
         "msr psp, r0  \n\t"  
