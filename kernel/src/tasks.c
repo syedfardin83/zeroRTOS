@@ -64,6 +64,14 @@ void zrtos_tasks_init(){
 
 TCB* firstTask = 0;
 void zrtos_tasks_start(){
+    if(zrtos_n_tasks == 0){
+        return;
+    }
+
+    zrtos_current_task = 0;
+    zrtos_next_task = 0;
+    zrtos_switch_to_thread(zrtos_tasks_list[0]);
+
     // start the systick interrupts
     zrtos_systick_enable();
 }
