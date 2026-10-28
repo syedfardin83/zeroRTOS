@@ -105,11 +105,21 @@ void zrtos_delay(uint64_t n){
     TCB* curr_TCB = zrtos_ready;
 
     //  Remove the ct_TCB from the ready list
-    if(zrtos_ready == ct_TCB){
-        zrtos_ready = zrtos_ready->next;
-    }else{
-        while(curr_TCB != ct_TCB && curr_TCB->next != ct_TCB) curr_TCB = curr_TCB->next;
-        curr_TCB->next = curr_TCB->next->next;
+    TCB* prev = 0;
+    TCB* curr = zrtos_ready;
+
+    while (curr && curr != ct_TCB) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (curr == ct_TCB) {
+        if (prev) {
+            prev->next = curr->next;
+        } else {
+            zrtos_ready = curr->next;
+        }
+        curr->next = 0;
     }
 
     // Add the ct_TCB to delayed list
