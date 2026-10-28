@@ -18,20 +18,27 @@ typedef struct TaskControlBlock{
 
     zrtos_task_function_t task_function;
     
+    uint64_t wake_tick;
+
     struct TaskControlBlock *next;
+
 
 } TCB;
 
 
 void zrtos_tasks_init();
 void zrtos_tasks_start();
+void zrtos_add_to_ready_list(TCB* tcb);
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
                         const char* task_name,
                         uint32_t task_stack_size,
                         uint32_t task_priority
 );
 
+void zrtos_delay(uint64_t n);
+
 extern TCB* zrtos_ready;
 extern TCB* zrtos_delayed;
+extern volatile uint64_t zrtos_ticks;
 
 #endif

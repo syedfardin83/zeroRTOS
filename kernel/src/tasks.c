@@ -8,7 +8,7 @@ volatile int zrtos_n_tasks;
 TCB* zrtos_ready;
 TCB* zrtos_delayed;
 
-void zrtos_add_to_tasks_list(TCB* tcb) {
+void zrtos_add_to_ready_list(TCB* tcb) {
     tcb->next = 0;
 
     if (zrtos_ready == 0 || tcb->taskPriority > zrtos_ready->taskPriority) {
@@ -54,7 +54,7 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
     // Push dummy register bank to new task stack
     zrtos_push_dummy(new_TCB,task_function);
     
-    zrtos_add_to_tasks_list(new_TCB);
+    zrtos_add_to_ready_list(new_TCB);
 
     return new_TCB;
 
@@ -86,4 +86,36 @@ void zrtos_tasks_start(){
     zrtos_start_first_task();
 
     while(1);
+}
+
+void zrtos_delay(uint64_t n){
+    ct_TCB->wake_tick = zrtos_ticks+n;
+
+    TCB* curr_TCB = zrtos_ready;
+
+    //  Remove the ct_TCB from the ready list
+    if(zrtos_ready == ct_TCB){
+        zrtos_ready = zrtos_ready->next;
+    }else{
+        while(curr_TCB != ct_TCB && curr_TCB->next != ct_TCB) curr_TCB = curr_TCB->next;
+        curr_TCB->next = curr_TCB->next->next;
+    }
+
+    // Add the ct_TCB to delayed list
+    curr_TCB = zrtos_delayed;
+    if (zrtos_delayed == 0 || ct_TCB->wake_tick < zrtos_delayed->wake_tick) {
+        ct_TCB->next = zrtos_delayed;
+        zrtos_delayed = ct_TCB;
+    } else {
+        TCB* curr = zrtos_delayed;
+        while (curr->next != 0 && curr->next->wake_tick <= ct_TCB->wake_tick) {
+            curr = curr->next;
+        }
+        ct_TCB->next = curr->next;
+        curr->next = ct_TCB;
+    }
+
+    nt_TCB = zrtos_ready;
+    zrtos_set_pendsv();
+
 }
