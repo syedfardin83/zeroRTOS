@@ -18,9 +18,9 @@ void sys_tick_handler(void){
     while(zrtos_delayed && zrtos_delayed->wake_tick <= zrtos_ticks){
         //  Remove it from delayed list
         TCB* temp = zrtos_delayed;
+        zrtos_delayed = temp->next;
         temp->next = 0;
-        zrtos_delayed = zrtos_delayed->next;
-    
+
         zrtos_add_to_ready_list(temp);
     }
 
