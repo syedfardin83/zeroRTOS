@@ -1,6 +1,7 @@
 #include "tasks.h"
 #include "memory.h"
 #include "zrtos_arch.h"
+#include "kernel/include/zrtos_config.h"
 
 
 volatile int zrtos_n_tasks;
@@ -60,11 +61,21 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 
 }
 
+void zrtos_idle_task(void){
+    while(1){
+        __asm__ volatile(
+            "wfi\n\t"
+        );
+    }
+}
+
 void zrtos_tasks_init(){
     zrtos_n_tasks=0;
 
     zrtos_ready = 0;
     zrtos_delayed = 0;
+
+    zrtos_create_task(zrtos_idle_task,"ZRTOS IDLE TASK",ZRTOS_IDLE_TASK_STACK_SIZE,0);
 }
 
 TCB* firstTask = 0;
@@ -119,3 +130,4 @@ void zrtos_delay(uint64_t n){
     zrtos_set_pendsv();
 
 }
+

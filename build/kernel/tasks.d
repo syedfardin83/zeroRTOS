@@ -31,4 +31,5 @@ build//kernel/tasks.o: kernel/src/tasks.c kernel/include/tasks.h \
  libopencm3/include/libopencm3/dispatch/nvic.h \
  libopencm3/include/libopencm3/stm32/l0/nvic.h \
  libopencm3/include/libopencm3/cm3/nvic.h \
- libopencm3/include/libopencm3/cm3/systick.h
+ libopencm3/include/libopencm3/cm3/systick.h \
+ kernel/include/zrtos_config.h

@@ -38,7 +38,7 @@ void sys_tick_handler(void){
 
 void zrtos_init(){
     zrtos_systick_setup();
-    zrtos_tasks_init();
     zrtos_memory_init();
     zrtos_nvic_setup();
+    zrtos_tasks_init();
 }
