@@ -100,6 +100,9 @@ void zrtos_tasks_start(){
 }
 
 void zrtos_delay(uint64_t n){
+    __asm__ volatile(
+        "cpsid i\n\t"
+    );
     ct_TCB->wake_tick = zrtos_ticks+n;
 
     TCB* curr_TCB = zrtos_ready;
@@ -137,7 +140,12 @@ void zrtos_delay(uint64_t n){
     }
 
     nt_TCB = zrtos_ready;
+
     zrtos_set_pendsv();
+
+    __asm__ volatile(
+        "cpsie i\n\t"
+    );
 
 }
 
