@@ -23,8 +23,9 @@ build//kernel/tasks.o: kernel/src/tasks.c kernel/include/tasks.h \
  /usr/arm-none-eabi/include/strings.h \
  /usr/arm-none-eabi/include/sys/string.h kernel/include/zrtos_config.h \
  kernel/include/tasks.h kernel/include/memory.h \
- kernel/include/zrtos_arch.h arch/armv6-m/include/port.h \
- kernel/include/tasks.h libopencm3/include/libopencm3/cm3/scb.h \
+ kernel/include/common-includes.h kernel/include/zrtos_arch.h \
+ arch/armv6-m/include/port.h kernel/include/tasks.h \
+ libopencm3/include/libopencm3/cm3/scb.h \
  libopencm3/include/libopencm3/cm3/memorymap.h \
  libopencm3/include/libopencm3/cm3/common.h \
  libopencm3/include/libopencm3/cm3/nvic.h \

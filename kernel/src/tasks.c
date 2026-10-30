@@ -1,5 +1,5 @@
 #include "tasks.h"
-#include "memory.h"
+#include "kernel/include/memory.h"
 #include "zrtos_arch.h"
 #include "kernel/include/zrtos_config.h"
 
@@ -11,6 +11,10 @@ TCB* zrtos_delayed;
 
 void zrtos_add_to_ready_list(TCB* tcb) {
     tcb->next = 0;
+
+    __asm__ volatile(
+        "cpsid i\n\t"
+    );    
 
     if (zrtos_ready == 0 || tcb->taskPriority > zrtos_ready->taskPriority) {
         tcb->next = zrtos_ready;
@@ -26,6 +30,10 @@ void zrtos_add_to_ready_list(TCB* tcb) {
         curr_node->next = tcb;
     }
     zrtos_n_tasks++;
+
+    __asm__ volatile(
+        "cpsie i\n\t"
+    );
 }
 
 TCB* zrtos_create_task(zrtos_task_function_t task_function,
@@ -105,7 +113,6 @@ void zrtos_delay(uint64_t n){
     );
     ct_TCB->wake_tick = zrtos_ticks+n;
 
-    TCB* curr_TCB = zrtos_ready;
 
     //  Remove the ct_TCB from the ready list
     TCB* prev = 0;
@@ -126,7 +133,6 @@ void zrtos_delay(uint64_t n){
     }
 
     // Add the ct_TCB to delayed list
-    curr_TCB = zrtos_delayed;
     if (zrtos_delayed == 0 || ct_TCB->wake_tick < zrtos_delayed->wake_tick) {
         ct_TCB->next = zrtos_delayed;
         zrtos_delayed = ct_TCB;
@@ -149,3 +155,88 @@ void zrtos_delay(uint64_t n){
 
 }
 
+zrtos_sem_t* zrtos_create_sem(uint32_t initial_count){
+    zrtos_sem_t* sem = (zrtos_sem_t*)zrtos_malloc(sizeof(zrtos_sem_t));
+    sem->count=initial_count;
+    sem->tcb=0;
+    return sem;
+}
+
+void zrtos_sem_take(zrtos_sem_t* sem){
+    __asm__ volatile(
+        "cpsid i\n\t"
+    );
+    if(sem->count > 0){
+        //  Semaphore already available, take it and continue normal execution of task
+        sem->count--;
+    }
+    else{
+        //  Semaphore not available, add task to waiting list
+
+        
+        //  remove ct_TCB from ready list
+        TCB* prev = 0;
+        TCB* curr = zrtos_ready;
+
+        while (curr && curr != ct_TCB) {
+            prev = curr;
+            curr = curr->next;
+        }
+
+        if (curr == ct_TCB) {
+            if (prev) {
+                prev->next = curr->next;
+            } else {
+                zrtos_ready = curr->next;
+            }
+            curr->next = 0;
+        }
+
+        // add ct_TCB to sem->tcb
+         if (sem->tcb == 0 || ct_TCB->taskPriority > sem->tcb->taskPriority) {
+            ct_TCB->next = sem->tcb;
+            sem->tcb = ct_TCB;
+        } else {
+            TCB* curr = sem->tcb;
+            while (curr->next != 0 && curr->next->taskPriority >= ct_TCB->taskPriority) {
+                curr = curr->next;
+            }
+            ct_TCB->next = curr->next;
+            curr->next = ct_TCB;
+        }
+
+        nt_TCB = zrtos_ready;
+
+        zrtos_set_pendsv();
+
+    }
+    __asm__ volatile(
+        "cpsie i\n\t"
+    );
+}
+
+void zrtos_sem_give(zrtos_sem_t* sem){
+    __asm__ volatile(
+        "cpsid i\n\t"
+    );
+    if(sem->tcb == 0){
+        //  No one is waiting, increment count
+        sem->count++;
+    }
+    else{
+        //  Someone is waiting, release the first one
+
+        TCB* temp = sem->tcb;
+        sem->tcb = sem->tcb->next;
+
+        temp->next = 0;
+        zrtos_add_to_ready_list(temp);
+
+        nt_TCB = zrtos_ready;
+        zrtos_set_pendsv();
+        
+    }
+    __asm__ volatile(
+        "cpsie i\n\t"
+    );
+}

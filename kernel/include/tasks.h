@@ -25,6 +25,11 @@ typedef struct TaskControlBlock{
 
 } TCB;
 
+typedef struct{
+    uint32_t count;
+    TCB* tcb;
+} zrtos_sem_t;
+
 
 void zrtos_tasks_init();
 void zrtos_tasks_start();
@@ -36,6 +41,10 @@ TCB* zrtos_create_task(zrtos_task_function_t task_function,
 );
 
 void zrtos_delay(uint64_t n);
+
+zrtos_sem_t* zrtos_create_sem(uint32_t initial_count);
+void zrtos_sem_take(zrtos_sem_t* sem);
+void zrtos_sem_give(zrtos_sem_t* sem);
 
 extern TCB* zrtos_ready;
 extern TCB* zrtos_delayed;
