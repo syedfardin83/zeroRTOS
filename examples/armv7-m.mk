@@ -1,10 +1,10 @@
 TARGET = firmware
 
 ARCH ?= armv7-m
-FAMILY ?= stm32/f4
-MCU ?= stm32f429zi
-DEVICE ?= stm32f429zi
-ARCH_FLAGS ?= -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -DSTM32F4 -DZRTOS_ARCH_ARMV7M
+FAMILY ?= stm32/f1
+MCU ?= stm32f103c8t6
+DEVICE ?= stm32f103c8t6
+ARCH_FLAGS ?= -mcpu=cortex-m3 -mthumb -msoft-float -DSTM32F1 -DZRTOS_ARCH_ARMV7M
 
 INCLUDES += -Iinclude/
 

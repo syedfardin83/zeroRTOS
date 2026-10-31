@@ -1,6 +1,6 @@
 ARCH ?= armv7-m
-FAMILY ?= stm32/f4
-MCU ?= stm32f429zi
+FAMILY ?= stm32/f1
+MCU ?= stm32f103c8t6
 OPENCM3_DIR ?= ./libopencm3
 OPENCM3_LIB = libopencm3/lib/$(subst /,_,libopencm3_$(FAMILY)).a
 
